@@ -5,8 +5,12 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in cryptocompare.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
-
-gem "rspec", "~> 3.0"
-
-gem "rubocop", "~> 1.21"
+group :development, :test do
+  gem "debug", "~> 1.7", ">= 1.7.1"
+  gem "rake", "~> 13.0"
+  gem "rspec", "~> 3.12"
+  gem "rubocop", "~> 1.39", require: false
+  gem "rubocop-performance", "~> 1.11", require: false
+  gem "rubocop-rspec", "~> 2.15", require: false
+  gem "simplecov", require: false
+end
