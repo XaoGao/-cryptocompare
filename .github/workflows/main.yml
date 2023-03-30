@@ -2,10 +2,9 @@ name: Ruby
 
 on:
   push:
-    branches:
-      - master
-
+    branches: [ "master" ]
   pull_request:
+    branches: [ "master" ]
 
 jobs:
   build:
@@ -23,5 +22,11 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Run tests
+      run: bundle exec rspec
+    - name: Run rubocop
+      run: |
+        bash -c "
+          bundle exec rubocop --require code_scanning --format CodeScanning::SarifFormatter -o rubocop.sarif
+          [[ $? -ne 2 ]]
+        "
