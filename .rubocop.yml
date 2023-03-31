@@ -23,3 +23,6 @@ Style/Documentation:
 
 Metrics/BlockLength:
   IgnoredMethods: ["describe", "context", "shared_examples"]
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
