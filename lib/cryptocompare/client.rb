@@ -1,27 +1,31 @@
 # frozen_string_literal: true
 
 require "faraday"
+require "json"
 
 module Cryptocompare
   class Client
     API_URL = "https://min-api.cryptocompare.com"
     AVAILABLE_KEYS = %i[api_key try_conversion relaxed_validation e extra_params sign pure_hash].freeze
+    QUERY_PARAMS = %i[api_key try_conversion relaxed_validation e extra_params sign].freeze
 
     def initialize(api_key:, options: {})
       @options = check_options(options).merge(api_key:)
     end
 
-    def convert(fsym:, tsyms:, &block)
+    # TODO: Pass faraday middlware to conn
+    def convert(fsym:, tsyms:, &_)
       check_params(fsym:, tsyms:)
 
-      http = Faraday.new(
+      conn = Faraday.new(
         url: API_URL,
         headers: { "Content-Type" => "application/json" }
       )
 
       options.merge(fsym:, tsyms: tsyms.join(","))
 
-      http.get("/data/price", params: options)
+      response = conn.get("/data/price", params: options)
+      return_response(response)
     end
 
     private
@@ -37,7 +41,22 @@ module Cryptocompare
     end
 
     def check_options(options)
-      options.select { |key, _| AVAILABLE_KEYS.include? key }
+      options.filter { |key, _| AVAILABLE_KEYS.include? key }
+    end
+
+    def return_response(faraday_response)
+      if faraday_response.success?
+        options[:pure_hash] ? JSON.parse(faraday_response.body) : Success.new(body: faraday_response)
+      else
+        Failure.new(body: faraday_response, error: faraday_response.body)
+      end
+    end
+
+    def query_params
+      options.filter { |key, _| QUERY_PARAMS.include? key }.each do |key, value|
+        key = :tryConversion if key == :try_conversion
+        key = :relaxedValidation if key == :relaxed_validation
+      end
     end
   end
 end
