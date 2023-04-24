@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "faraday"
 require "json"
 
 module Cryptocompare
+  using Utils
+
   class Client
-    API_URL = "https://min-api.cryptocompare.com"
     AVAILABLE_KEYS = %i[api_key try_conversion relaxed_validation e extra_params sign pure_hash].freeze
     QUERY_PARAMS = %i[api_key try_conversion relaxed_validation e extra_params sign].freeze
 
@@ -17,33 +17,24 @@ module Cryptocompare
 
     def initialize(options)
       @options = filter_options(options)
+      @http_client_factory = HttpClienFactory.new
     end
 
     def convert(fsym:, tsyms:, &block)
       check_params(fsym:, tsyms:)
+      query_params = create_query_params(options, fsym, tsyms)
 
-      conn = Faraday.new(
-        url: API_URL,
-        headers: { "Content-Type" => "application/json" }
-      ) do |f|
-        f.request :url_encoded
-        f.adapter Faraday.default_adapter
+      conn = http_client_factory.create do |f|
         yield(f) if block
       end
 
-      query_params = create_query_params(options, fsym, tsyms)
-
-      response = conn.get("/data/price", params: options)
+      response = conn.get("/data/price", params: query_params)
       return_response(response)
-    end
-
-    def convert!(fsym:, tsyms:, &block)
-      response = convert(fsym: fsym, tsyms: tsyms)
     end
 
     private
 
-    attr_reader :options
+    attr_reader :options, :http_client_factory
 
     def check_params(fsym:, tsyms:)
       raise ArgumentError "fsym can not be nil" if fsym.nil?
@@ -59,22 +50,28 @@ module Cryptocompare
 
     def return_response(faraday_response)
       if faraday_response.success?
-        options[:pure_hash] ? JSON.parse(faraday_response.body) : Success.new(body: faraday_response)
+        check_condition_pure_hash(faraday_response)
       else
         Failure.new(body: faraday_response, error: faraday_response.body)
       end
     end
 
     def query_params(options, fsym, tsyms)
-      params = options.deep_dup
-                      .filter { |key, _| QUERY_PARAMS.include? key }
-                      .merge(fsym:, tsyms: tsyms.join(","))
+      options.deep_dup
+             .filter { |key, _| QUERY_PARAMS.include? key }
+             .merge(fsym:, tsyms: tsyms.join(","))
+             .transform_keys_to_camel_case
+    end
 
-      
-
-      options.filter { |key, _| QUERY_PARAMS.include? key }.each do |key, value|
-        key = :tryConversion if key == :try_conversion
-        key = :relaxedValidation if key == :relaxed_validation
+    def check_condition_pure_hash(faraday_response)
+      if options[:pure_hash]
+        begin
+          JSON.parse(faraday_response.body)
+        rescue JSON::ParserError => _e
+          # TODO: need add error log, a think about throw error up or return failure?
+        end
+      else
+        Success.new(body: faraday_response)
       end
     end
   end
