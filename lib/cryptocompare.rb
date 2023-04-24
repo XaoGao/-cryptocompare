@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "cryptocompare/utils/string"
+require_relative "cryptocompare/utils/hash"
 require_relative "cryptocompare/version"
 require_relative "cryptocompare/configuration"
 require_relative "cryptocompare/errors"

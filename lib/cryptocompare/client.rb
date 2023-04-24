@@ -9,23 +9,36 @@ module Cryptocompare
     AVAILABLE_KEYS = %i[api_key try_conversion relaxed_validation e extra_params sign pure_hash].freeze
     QUERY_PARAMS = %i[api_key try_conversion relaxed_validation e extra_params sign].freeze
 
-    def initialize(api_key:, options: {})
-      @options = check_options(options).merge(api_key:)
+    def self.get(options = {})
+      @instance = new(options) if @instance.nil?
+
+      @instance
     end
 
-    # TODO: Pass faraday middlware to conn
-    def convert(fsym:, tsyms:, &_)
+    def initialize(options)
+      @options = filter_options(options)
+    end
+
+    def convert(fsym:, tsyms:, &block)
       check_params(fsym:, tsyms:)
 
       conn = Faraday.new(
         url: API_URL,
         headers: { "Content-Type" => "application/json" }
-      )
+      ) do |f|
+        f.request :url_encoded
+        f.adapter Faraday.default_adapter
+        yield(f) if block
+      end
 
-      options.merge(fsym:, tsyms: tsyms.join(","))
+      query_params = create_query_params(options, fsym, tsyms)
 
       response = conn.get("/data/price", params: options)
       return_response(response)
+    end
+
+    def convert!(fsym:, tsyms:, &block)
+      response = convert(fsym: fsym, tsyms: tsyms)
     end
 
     private
@@ -40,7 +53,7 @@ module Cryptocompare
       raise ArgumentError "tsyms must be a array" unless tsyms.is_a?(Array)
     end
 
-    def check_options(options)
+    def filter_options(options)
       options.filter { |key, _| AVAILABLE_KEYS.include? key }
     end
 
@@ -52,7 +65,13 @@ module Cryptocompare
       end
     end
 
-    def query_params
+    def query_params(options, fsym, tsyms)
+      params = options.deep_dup
+                      .filter { |key, _| QUERY_PARAMS.include? key }
+                      .merge(fsym:, tsyms: tsyms.join(","))
+
+      
+
       options.filter { |key, _| QUERY_PARAMS.include? key }.each do |key, value|
         key = :tryConversion if key == :try_conversion
         key = :relaxedValidation if key == :relaxed_validation
