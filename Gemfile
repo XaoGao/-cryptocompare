@@ -15,6 +15,6 @@ end
 
 group :test do
   gem "rspec", "~> 3.12"
-  gem "webmock", "~> 3.18", ">= 3.18.1"
   gem "simplecov", require: false
+  gem "webmock", "~> 3.18", ">= 3.18.1"
 end

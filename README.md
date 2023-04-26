@@ -31,7 +31,7 @@ client = CryptoCompare::Client.new(api_key: "YOUR_API_KEY", options)
 ```
 To get the data, you need to call the method:
 ```ruby
-response = clent.convert(fsym: "BTC", tsyms: ["ETH", "UDS"])
+response = clent.convert(fsym: "BTC", tsyms: ["ETH", "USD"])
 ```
 
 ### Params
@@ -57,7 +57,7 @@ If set to true, the server will return the hash instead of the response (Convert
 ### Middleware
 Gem use a faraday for http request, you can set middleaware, example:
 ```ruby
-response = clent.convert(fsym: "BTC", tsyms: ["ETH", "UDS"]) do |f|
+response = clent.convert(fsym: "BTC", tsyms: ["ETH", "USD"]) do |f|
   f.request :json
   f.request :logger
   f.response :json
@@ -73,7 +73,7 @@ If not use flag **pure_hash** response will be object with methods:
 ### Strict
 Clent can send strict requests, example:
 ```ruby
-response = clent.convert!(fsym: "BTC", tsyms: ["ETH", "UDS"])
+response = clent.convert!(fsym: "BTC", tsyms: ["ETH", "USD"])
 ```
 Raise an error if the http request is not successful.
 Error types:
