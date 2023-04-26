@@ -31,7 +31,7 @@ client = CryptoCompare::Client.new(api_key: "YOUR_API_KEY", options)
 ```
 To get the data, you need to call the method:
 ```ruby
-response = clent.convert(sym: "BTC", tsyms: ["ETH", "UDS"])
+response = clent.convert(fsym: "BTC", tsyms: ["ETH", "UDS"])
 ```
 
 ### Params

@@ -17,7 +17,7 @@ module Cryptocompare
 
     def initialize(options)
       @options = filter_options(options)
-      @http_client_factory = HttpClienFactory.new
+      @http_client_factory = HttpClientFactory.new
     end
 
     def convert(fsym:, tsyms:, &block)
@@ -28,7 +28,11 @@ module Cryptocompare
         yield(f) if block
       end
 
-      response = conn.get("/data/price", params: query_params)
+      response = conn.get do |req|
+        req.url "/data/price"
+        req.params = query_params
+      end
+
       return_response(response)
     end
 
@@ -56,8 +60,8 @@ module Cryptocompare
       end
     end
 
-    def query_params(options, fsym, tsyms)
-      options.deep_dup
+    def create_query_params(options, fsym, tsyms)
+      options.clone
              .filter { |key, _| QUERY_PARAMS.include? key }
              .merge(fsym:, tsyms: tsyms.join(","))
              .transform_keys_to_camel_case
