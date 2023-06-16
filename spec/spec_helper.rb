@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start
+
+require "webmock/rspec"
 require "cryptocompare"
 
 RSpec.configure do |config|
