@@ -5,7 +5,7 @@ module Cryptocompare
   module HttpMethods
     using Utils
 
-    class AbstractRquest
+    class AbstractRequest
       include Concerns::Paramable
       include Concerns::Responsable
 
@@ -16,11 +16,11 @@ module Cryptocompare
       end
 
       def perform(_options)
-        raise NotImplementedError "'perform' must be implemented in #{self.class}"
+        raise NotImplementedError, "'perform' must be implemented in #{self.class}"
       end
 
       def perform!(_options)
-        raise NotImplementedError "'perform!' must be implemented in #{self.class}"
+        raise NotImplementedError, "'perform!' must be implemented in #{self.class}"
       end
     end
   end

@@ -2,7 +2,7 @@
 
 module Cryptocompare
   module HttpMethods
-    class Price < AbstractRquest
+    class Price < AbstractRequest
       def initialize(options)
         @options = options
         super
