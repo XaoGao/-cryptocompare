@@ -24,6 +24,14 @@ module Cryptocompare
       end
       # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+      def perform!(args, &block)
+        result = perform(args, &block)
+
+        return result if result.is_a?(Hash) || result.success?
+
+        raise NotSuccessful, result
+      end
+
       def query_params
         %i[api_key try_conversion relaxed_validation e extra_params sign].freeze
       end
