@@ -2,8 +2,8 @@
 
 module Cryptocompare
   class Success < Response
-    def initialize(body:)
-      super(status: true, body:, error: nil)
+    def initialize(value:)
+      super(status: true, value:, error: nil)
     end
   end
 end

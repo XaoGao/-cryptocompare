@@ -19,7 +19,7 @@ module Cryptocompare
         it { expect(response).to be_a Cryptocompare::Success }
         it { expect(response.status).to be true }
         it { expect(response.error).to be_nil }
-        it { expect(response.body.env.response_body).to eq(body) }
+        it { expect(response.value.env.response_body).to eq(body) }
       end
     end
   end

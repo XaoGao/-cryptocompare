@@ -16,67 +16,15 @@ module Cryptocompare
     end
 
     def initialize(options)
-      @options = filter_options(options)
-      @http_client_factory = HttpClientFactory.new
+      @options = options
     end
 
     def convert(fsym:, tsyms:, &block)
-      check_params(fsym:, tsyms:)
-      query_params = create_query_params(options, fsym, tsyms)
-
-      conn = http_client_factory.create do |f|
-        yield(f) if block
-      end
-
-      response = conn.get do |req|
-        req.url "/data/price"
-        req.params = query_params
-      end
-
-      return_response(response)
+      HttpMethods::Convert.new(options).perform(fsym:, tsyms:, &block)
     end
 
     private
 
-    attr_reader :options, :http_client_factory
-
-    def check_params(fsym:, tsyms:)
-      raise ArgumentError "fsym can not be nil" if fsym.nil?
-      raise ArgumentError "tsyms can not be nil" if tsyms.nil?
-
-      raise ArgumentError "fsym must be a string" unless fsym.is_a?(String)
-      raise ArgumentError "tsyms must be a array" unless tsyms.is_a?(Array)
-    end
-
-    def filter_options(options)
-      options.filter { |key, _| AVAILABLE_KEYS.include? key }
-    end
-
-    def return_response(faraday_response)
-      if faraday_response.success?
-        check_condition_pure_hash(faraday_response)
-      else
-        Failure.new(body: faraday_response, error: faraday_response.body)
-      end
-    end
-
-    def create_query_params(options, fsym, tsyms)
-      options.clone
-             .filter { |key, _| QUERY_PARAMS.include? key }
-             .merge(fsym:, tsyms: tsyms.join(","))
-             .transform_keys_to_camel_case
-    end
-
-    def check_condition_pure_hash(faraday_response)
-      if options[:pure_hash]
-        begin
-          JSON.parse(faraday_response.body)
-        rescue JSON::ParserError => _e
-          # TODO: need add error log, a think about throw error up or return failure?
-        end
-      else
-        Success.new(body: faraday_response)
-      end
-    end
+    attr_reader :options
   end
 end

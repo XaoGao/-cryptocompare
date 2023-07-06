@@ -2,8 +2,8 @@
 
 module Cryptocompare
   RSpec.describe Response do
-    let(:success_response) { described_class.new(status: true, body: nil, error: nil) }
-    let(:failure_response) { described_class.new(status: false, body: nil, error: nil) }
+    let(:success_response) { described_class.new(status: true, value: nil, error: nil) }
+    let(:failure_response) { described_class.new(status: false, value: nil, error: nil) }
 
     describe ".success?" do
       it { expect(success_response.success?).to be true }
