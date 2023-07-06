@@ -8,7 +8,7 @@ module Cryptocompare
           if faraday_response.success?
             check_condition_pure_hash(faraday_response)
           else
-            Failure.new(body: faraday_response, error: faraday_response.body)
+            Failure.new(value: faraday_response, error: faraday_response.body)
           end
         end
 
@@ -20,7 +20,7 @@ module Cryptocompare
               # TODO: need add error log, a think about throw error up or return failure?
             end
           else
-            Success.new(body: faraday_response)
+            Success.new(value: faraday_response)
           end
         end
       end

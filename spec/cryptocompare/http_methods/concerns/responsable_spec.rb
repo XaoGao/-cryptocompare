@@ -39,7 +39,7 @@ module Cryptocompare
             end
 
             it "value is all object" do
-              expect(result.body).to eq(faraday_response)
+              expect(result.value).to eq(faraday_response)
             end
           end
         end

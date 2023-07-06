@@ -2,14 +2,14 @@
 
 module Cryptocompare
   class Response
-    attr_reader :status, :body, :error
+    attr_reader :status, :value, :error
 
-    def initialize(status:, body:, error:)
+    def initialize(status:, value:, error:)
       raise ArgumentError "status can not be nil" if status.nil?
       raise ArgumentError "status must be boolean" unless [true, false].include?(status)
 
       @status = status
-      @body = body
+      @value = value
       @error = error
     end
 

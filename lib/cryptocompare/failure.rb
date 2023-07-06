@@ -2,8 +2,8 @@
 
 module Cryptocompare
   class Failure < Response
-    def initialize(body:, error:)
-      super(status: false, body:, error:)
+    def initialize(value:, error:)
+      super(status: false, value:, error:)
     end
   end
 end
