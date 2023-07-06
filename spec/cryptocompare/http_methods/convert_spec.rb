@@ -73,19 +73,19 @@ module Cryptocompare
             options_fsym_is_not_array = options.merge(fsym: "ETH", tsyms: "USD")
             expect { convert.perform!(options_fsym_is_not_array) }.to raise_error(ArgumentError, "tsyms must be an array")
           end
+        end
 
-          context "when failure response" do
-            let(:body) { JSON.dump("ETH" => 15.23, "USD" => 29_843.3) }
+        context "when failure response" do
+          let(:body) { JSON.dump("ETH" => 15.23, "USD" => 29_843.3) }
 
-            before do
-              stub_request(:get, "https://min-api.cryptocompare.com/data/price?apiKey=123&fsym=BTC&tsyms=ETH,USD")
-                .with(headers: { "Accept" => "*/*", "Content-Type" => "application/json" })
-                .to_return(status: 400, body: "some error", headers: {})
-            end
+          before do
+            stub_request(:get, "https://min-api.cryptocompare.com/data/price?apiKey=123&fsym=BTC&tsyms=ETH,USD")
+              .with(headers: { "Accept" => "*/*", "Content-Type" => "application/json" })
+              .to_return(status: 400, body: "some error", headers: {})
+          end
 
-            it "raise error" do
-              expect { convert.perform!(fsym: "BTC", tsyms: %w[ETH USD]) }.to raise_error(NotSuccessful)
-            end
+          it "raise error" do
+            expect { convert.perform!(fsym: "BTC", tsyms: %w[ETH USD]) }.to raise_error(NotSuccessful)
           end
         end
       end

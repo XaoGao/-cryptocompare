@@ -24,8 +24,8 @@ module Cryptocompare
       end
       # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-      def perform!(args, &block)
-        result = perform(args, &block)
+      def perform!(args, &)
+        result = perform(args, &)
 
         return result if result.is_a?(Hash) || result.success?
 
