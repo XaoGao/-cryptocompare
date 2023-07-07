@@ -6,6 +6,8 @@ module Cryptocompare
   using Utils
 
   class Client
+    extend Configuration
+
     AVAILABLE_KEYS = %i[api_key try_conversion relaxed_validation e extra_params sign pure_hash].freeze
     QUERY_PARAMS = %i[api_key try_conversion relaxed_validation e extra_params sign].freeze
 

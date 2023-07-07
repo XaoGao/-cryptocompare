@@ -18,5 +18,4 @@ require_relative "cryptocompare/client"
 
 # Main module
 module Cryptocompare
-  extend Configuration
 end

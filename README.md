@@ -20,7 +20,7 @@ You can configure the client for each request or confugre factory with defualt v
 
 ```ruby
 require 'cryptocompare'
-CryptoCompare.configure do |config|
+CryptoCompare::Client.configure do |config|
   config.api_key = "YOUR_API_KEY"
   config.pure_hash = true
   ...
@@ -41,13 +41,13 @@ The cryptocurrency symbol of interest [ Min length - 1] [ Max length - 30]
 Comma separated cryptocurrency symbols list to convert into [ Min length - 1] [ Max length - 500]
 
 ### Options
-1. **tryConversion *boolean***
+1. **try_conversion *boolean***
 If set to false, it will try to get only direct trading values. This parameter is only valid for e=CCCAGG value [ Default - **true**]
-2. **relaxedValidation *boolean***
+2. **relaxed_validation *boolean***
 Setting this to true will make sure you don't get an error on non trading pairs, they will just be filtered out of the response. [ Default - **true**]
 3. **e *string***
 The exchange to obtain data from [ Min length - 2] [ Max length - 30] [ Default - **cccagg_or_exchange**]
-4. **extraParams *string***
+4. **extra_params *string***
 The name of your application (we recommend you send it) [ Min length - 1] [ Max length - 2000] [ Default - **NotAvailable**]
 5. **sign *boolean***
 If set to true, the server will sign the requests (by default we don't sign them), this is useful for usage in smart contracts [ Default - **false**]
@@ -67,7 +67,7 @@ end
 ### Response
 If not use flag **pure_hash** response will be object with methods:
 1. response.**status** - return **true** if the http request has successful http status
-2. response.**body** - return the **pure response** from http client
+2. response.**value** - return the **pure response** from http client
 3. response.**error** - return **pure message** from Cryptocompare if request is not successful
 
 ### Strict
