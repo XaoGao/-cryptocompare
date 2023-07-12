@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# nodoc:
 module Cryptocompare
   module HttpMethods
     using Utils

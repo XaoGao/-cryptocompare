@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "debug"
+require "json"
 require_relative "cryptocompare/utils/string"
 require_relative "cryptocompare/utils/hash"
 require_relative "cryptocompare/http_client_factory"
@@ -17,6 +18,5 @@ require_relative "cryptocompare/http_methods/price/convert"
 require_relative "cryptocompare/http_methods/price/full_data"
 require_relative "cryptocompare/client"
 
-# Main module
 module Cryptocompare
 end
