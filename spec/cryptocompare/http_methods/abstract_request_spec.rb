@@ -10,7 +10,34 @@ module Cryptocompare
       end
 
       describe ".perform!" do
-        it { expect { request.perform!(nil) }.to raise_error(NotImplementedError) }
+        context "when success result" do
+          # rubocop:disable RSpec/SubjectStub
+          before do
+            allow(request)
+              .to receive(:perform)
+              .and_return(Cryptocompare::Success.new(value: "some value"))
+          end
+          # rubocop:enable RSpec/SubjectStub
+
+          it "return success object" do
+            result = request.perform!(fsym: "UTC", tsyms: %w[USD])
+            expect(result.class).to eq(Cryptocompare::Success)
+          end
+        end
+
+        context "when failure result" do
+          # rubocop:disable RSpec/SubjectStub
+          before do
+            allow(request)
+              .to receive(:perform)
+              .and_return(Cryptocompare::Failure.new(value: "some value", error: "some error"))
+          end
+          # rubocop:enable RSpec/SubjectStub
+
+          it "raise NotSuccessful" do
+            expect { request.perform!(fsym: "UTC", tsyms: %w[USD]) }.to raise_error(NotSuccessful)
+          end
+        end
       end
     end
   end
