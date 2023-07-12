@@ -22,7 +22,7 @@ module Cryptocompare
     end
 
     def convert(fsym:, tsyms:, &block)
-      HttpMethods::Convert.new(options).perform(fsym:, tsyms:, &block)
+      HttpMethods::Price::Convert.new(options).perform(fsym:, tsyms:, &block)
     end
 
     private
