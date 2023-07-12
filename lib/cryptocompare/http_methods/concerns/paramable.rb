@@ -6,6 +6,7 @@ module Cryptocompare
       module Paramable
         using Utils
 
+        # List of all params query names
         def available_keys
           %i[api_key try_conversion relaxed_validation e extra_params sign pure_hash].freeze
         end
