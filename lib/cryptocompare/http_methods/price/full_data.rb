@@ -7,7 +7,7 @@ module Cryptocompare
         # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         def perform(args, &block)
           check_params(fsym: args[:fsym], tsyms: args[:tsyms])
-          query_params = create_query_params(options) do |dup|
+          hash_query_params = create_query_params(options) do |dup|
             dup[:fsym] = args[:fsym]
             dup[:tsyms] = args[:tsyms].join(",")
           end
@@ -18,7 +18,7 @@ module Cryptocompare
 
           response = conn.get do |req|
             req.url "/data/pricemultifull"
-            req.params = query_params
+            req.params = hash_query_params
           end
 
           return_response(response)

@@ -16,6 +16,7 @@ require_relative "cryptocompare/http_methods/concerns/responsable"
 require_relative "cryptocompare/http_methods/abstract_request"
 require_relative "cryptocompare/http_methods/price/convert"
 require_relative "cryptocompare/http_methods/price/full_data"
+require_relative "cryptocompare/http_methods/price/generate_custom_average"
 require_relative "cryptocompare/client"
 
 module Cryptocompare
