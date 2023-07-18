@@ -17,6 +17,9 @@ See documentation: [API docs](https://min-api.cryptocompare.com/documentation).
       - [Full Data](#full-data)
         - [Params](#params-1)
         - [Options](#options-1)
+      - [Generate Custom Average](#generate-custom-average)
+        - [Params](#params-2)
+        - [Options](#options-2)
   - [Middleware](#middleware)
   - [Response](#response)
   - [Strict](#strict)
@@ -111,6 +114,30 @@ If set to true, the server will return the hash instead of the response (Convert
 To get the data, you need to call the method:
 ```ruby
 response = client.full_data(fsym: "BTC", tsyms: ["ETH", "USD"])
+```
+
+#### Generate Custom Average
+Compute the current trading info (price, vol, open, high, low etc) of the requested pair as a volume weighted average based on the exchanges requested.
+
+##### Params
+* **fsym *string* Required**
+The cryptocurrency symbol of interest [ Min length - 1] [ Max length - 30]
+* **tsyms *array by string* Required**
+Comma separated cryptocurrency symbols list to convert into [ Min length - 1] [ Max length - 30]
+* **e *string* Required**
+The exchange to obtain data from [ Min length - 2] [ Max length - 150]
+
+##### Options
+1. **extra_params *string***
+The name of your application (we recommend you send it) [ Min length - 1] [ Max length - 2000] [ Default - **NotAvailable**]
+2. **sign *boolean***
+If set to true, the server will sign the requests (by default we don't sign them), this is useful for usage in smart contracts [ Default - **false**]
+3. **pure_hash *boolean***
+If set to true, the server will return the hash instead of the response (Convert will be throught default JSON.parse) [ Default - **false**]
+
+To get the data, you need to call the method:
+```ruby
+response = client.generate_custom_average(fsym: "BTC", tsyms: "USD", e: "Coinbase,Bitfinex")
 ```
 
 ## Middleware
