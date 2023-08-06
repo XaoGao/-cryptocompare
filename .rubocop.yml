@@ -23,3 +23,6 @@ Style/Documentation:
 
 Gemspec/RequiredRubyVersion:
   Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
