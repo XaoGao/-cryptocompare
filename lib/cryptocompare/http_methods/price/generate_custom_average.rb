@@ -6,10 +6,10 @@ module Cryptocompare
       class GenerateCustomAverage < AbstractRequest
         # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         def perform(args, &block)
-          check_params(fsym: args[:fsym], tsyms: args[:tsyms], e: args[:e])
+          check_params(fsym: args[:fsym], tsym: args[:tsym], e: args[:e])
           hash_query_params = create_query_params(options) do |dup|
             dup[:fsym] = args[:fsym]
-            dup[:tsyms] = args[:tsyms].join(",")
+            dup[:tsym] = args[:tsym]
             dup[:e] = args[:e]
           end
 
@@ -32,12 +32,12 @@ module Cryptocompare
 
         private
 
-        def check_params(fsym:, tsyms:, e:)
+        def check_params(fsym:, tsym:, e:)
           raise ArgumentError, "fsym can not be nil" if fsym.nil?
-          raise ArgumentError, "tsyms can not be nil" if tsyms.nil?
+          raise ArgumentError, "tsym can not be nil" if tsym.nil?
           raise ArgumentError, "e can not be nil" if e.nil?
           raise ArgumentError, "fsym must be a string" unless fsym.is_a?(String)
-          raise ArgumentError, "tsyms must be an array" unless tsyms.is_a?(Array)
+          raise ArgumentError, "tsym must be a string" unless tsym.is_a?(String)
           raise ArgumentError, "e must be a string" unless e.is_a?(String)
         end
       end

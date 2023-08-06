@@ -122,8 +122,8 @@ Compute the current trading info (price, vol, open, high, low etc) of the reques
 ##### Params
 * **fsym *string* Required**
 The cryptocurrency symbol of interest [ Min length - 1] [ Max length - 30]
-* **tsyms *array by string* Required**
-Comma separated cryptocurrency symbols list to convert into [ Min length - 1] [ Max length - 30]
+* **tsym *string* Required**
+The currency symbol to convert into [ Min length - 1] [ Max length - 30]
 * **e *string* Required**
 The exchange to obtain data from [ Min length - 2] [ Max length - 150]
 
@@ -137,7 +137,7 @@ If set to true, the server will return the hash instead of the response (Convert
 
 To get the data, you need to call the method:
 ```ruby
-response = client.generate_custom_average(fsym: "BTC", tsyms: "USD", e: "Coinbase,Bitfinex")
+response = client.generate_custom_average(fsym: "BTC", tsym: "USD", e: "Coinbase,Bitfinex")
 ```
 
 ## Middleware

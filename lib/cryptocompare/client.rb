@@ -24,8 +24,8 @@ module Cryptocompare
       HttpMethods::Price::FullData.new(options).perform(fsym:, tsyms:, &block)
     end
 
-    def generate_custom_average(fsym:, tsyms:, e:, &block)
-      HttpMethods::Price::GenerateCustomAverage.new(options).perform(fsym:, tsyms:, e:, &block)
+    def generate_custom_average(fsym:, tsym:, e:, &block)
+      HttpMethods::Price::GenerateCustomAverage.new(options).perform(fsym:, tsym:, e:, &block)
     end
 
     private
